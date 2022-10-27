@@ -16,7 +16,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalFooter,
-  useToast,
+  // useToast,
   ModalBody,
   useDisclosure,
   ModalCloseButton,
@@ -31,12 +31,12 @@ import {
 import { useEffect, useState } from "react";
 
 function ProductAddToCart() {
+  const [empty,setEmpty] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [orderlist, setOrderlist] = useState([]);
   const [updatedata, setUpdateData] = useState([]);
   const [oS, setOS] = useState(updatedata.orderStatus);
   const [pS, setPS] = useState(updatedata.paymentStatus);
-  const toast = useToast();
 
   const getData = async () => {
     try {
@@ -48,12 +48,29 @@ function ProductAddToCart() {
           credentials: "include",
         },
       });
-      const data = await res.json();
+      var data = await res.json();
       setOrderlist(data);
       console.log(data);
     } catch (err) {
       console.log(err);
     }
+    const i = data.map((item)=>{
+      if(item.orderStatus === "Done" && item.paymentStatus === "Done"){
+        console.log(item);
+        return true
+      }
+      else{
+        return false
+      }
+    })
+    console.log(i);
+    if(i===true){
+      setEmpty(true)
+    }
+    else{
+      setEmpty(false);
+    }
+    console.log(empty)
   };
 
   const handleUpdate = async () => {
@@ -84,7 +101,7 @@ function ProductAddToCart() {
         getData();
         onClose();
       }
-    } catch (err) {
+    }catch(err) {
       console.log(err);
     }
   };
@@ -98,23 +115,10 @@ function ProductAddToCart() {
   }, [updatedata]);
   return (
     <Flex w="full" alignItems="center" justifyContent="center">
-      <Button
-        onClick={() =>
-          toast({
-            title: "top-right toast",
-            position: "top-right",
-            variant: "top-accent",
-            status: "success",
-            duration: 30000,
-            isClosable: true,
-          })
-        }
-      >
-        Show toast
-      </Button>
+      {empty && <h1>Empty</h1>}
       {orderlist.map((data) => {
         if (data.orderStatus === "Done" && data.paymentStatus === "Done") {
-          return <Box key={data.id}>No Current Orders</Box>;
+          return <Box key={data.id}></Box>;
         }
         return (
           <Box

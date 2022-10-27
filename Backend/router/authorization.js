@@ -215,7 +215,9 @@ router.post("/updateStatus", async (req, res) => {
 });
 
 router.post("/showNotification", async (req, res) => {
+  console.log("hi")
   const { ishowed, _id } = req.body;
+  console.log(ishowed,_id);
   try {
     const update = await Order.findByIdAndUpdate(
       { _id },

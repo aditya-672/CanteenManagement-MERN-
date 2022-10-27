@@ -2,26 +2,33 @@ import React from "react";
 import Navbar from "../navbar/Navbar";
 import { FiShoppingCart } from "react-icons/fi";
 import Product from "../../pages/Product/Product";
-import { SimpleGrid, Box, Heading, Flex, Icon, Badge,useToast } from "@chakra-ui/react";
+import {
+  SimpleGrid,
+  Box,
+  Heading,
+  Flex,
+  Icon,
+  Badge,
+  Button,
+  useToast,
+} from "@chakra-ui/react";
 import { db } from "../../firebase/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { useCart } from "react-use-cart";
 import { RoleContext } from "../../App";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Menu() {
-  // const toast = useToast();
+  const navigate = useNavigate()
+  const toast = useToast();
   const { totalUniqueItems } = useCart();
   const role = useContext(RoleContext);
   const [itm, setItm] = useState([]);
-  const [orderlist , setOrderlist] = useState([]);
-  // const [showNotification, setNotification] = useState(false);
-  // const [orderlist, setOrderlist] = useState([]);
-  // const [id,setId] = useState('');
-  // const [list,setList] = useState([]);
-  
+  const [orderlist, setOrderlist] = useState([]);
+  const [showbUtton, setShowbutton] = useState(false);
   const getData = async () => {
     try {
       const res = await fetch("/showorders", {
@@ -32,93 +39,110 @@ export default function Menu() {
           credentials: "include",
         },
       });
-      console.log("hi in get data")
       const data = await res.json();
-      console.log(data);
       setOrderlist(data);
-      console.log(orderlist)
+      const d = data.filter((item) => {
+        return (
+          item.studentname === role.name &&
+          item.ishowed === false
+        );
+      });
+      if (d.length) {
+        setShowbutton(true);
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {
+  const handleNOT = () => {
     getData();
-  }, []);
+    var orderlist2 = [];
+    var notification = false;
+    const filter = orderlist.filter((item) => {
+      return (
+        item.studentname === role.name &&
+        item.ishowed === false &&
+        item.orderStatus === "Done" &&
+        item.paymentStatus === "Done"
+      );
+    });
+    if (filter.length === 0) {
+      toast({
+        title: `Wait Yaar the Order is COOKING NA ! `,
+        position: "top-right",
+        variant: "top-accent",
+        status: "info",
+        duration: 30000,
+        isClosable: true,
+      });
+    }
+    // a = filter;
+    orderlist2 = filter;
+    let idd;
+    var k = Object.keys(orderlist2);
+    var b = [];
+    b.push(k);
+    b = b[0];
+    let orderID;
+    b = b.filter((item) => {
+      return orderlist2[item];
+    });
+    if (filter.length !== 0) {
+      for (var x in b) {
+        orderID = orderlist2[x].orderid;
+        idd = orderlist2[x]._id;
+      }
+      notification = true;
+    }
+    if (notification === true) {
+      const updateShowNotification = async () => {
+        try {
+          const res = await fetch("/showNotification", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ishowed: true,
+              _id: idd,
+            }),
+          });
+          const data = await res.json();
+          if (data === "200") {
+            toast({
+              title: `Your OrderId : ${orderID}, Go Get Your Food from Counter`,
+              position: "top-right",
+              variant: "top-accent",
+              status: "success",
+              duration: 30000,
+              isClosable: true,
+            });
+          }
+          setShowbutton(false)
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      updateShowNotification();
+    }
+  };
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "items"), (snapshot) => {
-      let list = [];
+      let orderlist = [];
       snapshot.docs.forEach((doc) => {
-        list.push({ id: doc.id, ...doc.data() });
+        orderlist.push({ id: doc.id, ...doc.data() });
       });
-      setItm(list);
+      setItm(orderlist);
     });
     return unsub;
   }, []);
 
-  // useEffect(() => {
-  //   const check = () => {
-  //     console.log(list);
-  //     const filter = list.filter((item) => {
-  //       return item.studentname === role.name;
-  //     });
-  //     setList(filter);
-  //     console.log("F1 : ",list)
-  //     const f = list.filter((i)=>{
-  //       return(i.ishowed===false)
-  //     })
-
-  //     console.log("F2 : ",list)
-  //     setList(f)
-  //     const filter2 = list.filter((item) => {
-  //       var nowtime = new Date();
-  //       item.orderDate = new Date(item.orderDate);
-  //       console.log(item.orderDate.getMinutes());
-  //       return (nowtime.getMinutes() - item.orderDate.getMinutes()) < 20;
-  //     });
-  //     console.log("F3 :",filter2)
-  //     // if(filter2.length!==0){
-  //     //   setId(filter2._id)
-  //     //   setNotification(true);
-  //     // }
-  //     console.log(filter2);
-  //   };
-  //   setInterval(() => {
-  //     check();
-  //   }, 60 * 500);
-  // }, []);
-
-  // const updateShowNotification = async () => {
-  //   try {
-  //     const res = await fetch("/showNotification", {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         isshowed : true,
-  //         _id:id,
-  //       }),
-  //     });
-  //     toast({
-  //       title: "top-right toast",
-  //       position: "top-right",
-  //       variant: "top-accent",
-  //       status: "success",
-  //       duration: 30000,
-  //       isClosable: true,
-  //     })
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-  // useEffect(() => {
-  //   updateShowNotification();
-  // }, [showNotification]);
-
-  
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
@@ -127,6 +151,8 @@ export default function Menu() {
         <Heading as="h2" p="10" size="2xl">
           Menu Item
         </Heading>
+        {showbUtton && <Button onClick={handleNOT}>Get order</Button>}
+        <Button onClick={()=>navigate("/user/myorders")}>My Orders</Button>
         <Box
           display="flex"
           justifyContent="center"

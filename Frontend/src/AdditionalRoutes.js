@@ -5,6 +5,7 @@ import AddCategory from './components/Canteen/AddCategory'
 import AddItem from "./components/Canteen/AddItem";
 import TotalOrders from "./components/Canteen/TotalOrders"
 import ItemPage from "./components/user/Cart";
+import MyOrders from "./components/user/MyOrders";
 
 function AdditionalRoutes() {
   return (
@@ -22,6 +23,7 @@ function AdditionalRoutes() {
 
             <Route path="user/item-page" element={<ItemPage/>}/>
             <Route path="user/menupage" element={<Menu />}/>
+            <Route path="user/myorders" element={<MyOrders />} />
           </Routes>
       </Router>
     </>
