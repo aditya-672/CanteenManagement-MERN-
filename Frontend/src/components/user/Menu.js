@@ -67,16 +67,39 @@ export default function Menu() {
         item.paymentStatus === "Done"
       );
     });
-    if (filter.length === 0) {
-      toast({
-        title: `Wait Yaar the Order is COOKING NA ! `,
-        position: "top-right",
-        variant: "top-accent",
-        status: "info",
-        duration: 30000,
-        isClosable: true,
-      });
+    const f = orderlist.filter((item) => {
+      return (
+        item.studentname === role.name &&
+        item.ishowed === false &&
+        item.orderStatus !== "Done" &&
+        item.paymentStatus !== "Done"
+      );
+    });
+    console.log(f)
+    if(f){
+      for(var a in f){
+        console.log(f[a]);
+        toast({
+          title: `Wait your Order Id : ${f[a].orderid} is still cooking ! `,
+          position: "top-right",
+          variant: "top-accent",
+          status: "info",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     }
+    
+    // if (filter.length === 0) {
+    //   toast({
+    //     title: `Wait Yaar the Order is COOKING NA ! `,
+    //     position: "top-right",
+    //     variant: "top-accent",
+    //     status: "info",
+    //     duration: 30000,
+    //     isClosable: true,
+    //   });
+    // }
     // a = filter;
     orderlist2 = filter;
     let idd;
@@ -86,6 +109,7 @@ export default function Menu() {
     b = b[0];
     let orderID;
     b = b.filter((item) => {
+      console.log("b",b)
       return orderlist2[item];
     });
     if (filter.length !== 0) {
@@ -116,7 +140,7 @@ export default function Menu() {
               position: "top-right",
               variant: "top-accent",
               status: "success",
-              duration: 30000,
+              duration: 10000,
               isClosable: true,
             });
           }
@@ -153,6 +177,7 @@ export default function Menu() {
         </Heading>
         {showbUtton && <Button onClick={handleNOT}>Get order</Button>}
         <Button onClick={()=>navigate("/user/myorders")}>My Orders</Button>
+        <Button onClick={()=>navigate("/")}>LogOut</Button>
         <Box
           display="flex"
           justifyContent="center"

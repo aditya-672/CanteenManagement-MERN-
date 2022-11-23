@@ -5,6 +5,7 @@ const Manager = require("../model/managerschema");
 const Category = require("../model/categoryschema");
 const Order = require("../model/orderschema");
 const authenticate = require("../middleware/authenticate");
+const sendemail = require("../middleware/sendemail");
 const router = express.Router();
 
 //------------------------------------USER SIDE--------------------------------------------//
@@ -197,6 +198,7 @@ router.get("/showorders", async (req, res) => {
 
 router.post("/updateStatus", async (req, res) => {
   console.log(req.body);
+  // const email = "waghmareaditya08@gmail.com"
   const { orderStatus, _id, paymentStatus } = req.body;
   try {
     const update = await Order.findByIdAndUpdate(
@@ -206,8 +208,32 @@ router.post("/updateStatus", async (req, res) => {
           orderStatus,
           paymentStatus,
         },
+      },{
+        new:true,
       }
     );
+    console.log(update)
+    const stu = await User.findById(update.stuid)
+    if(update.orderStatus==="Done"){
+      try{
+          const send_to = stu.email;
+          const sent_from = process.env.EMAIL_USER;
+          const subject = "Your Order Is Ready !! 🍴"
+          const message = `
+          <h3>Hello ${update.studentname} </h3>
+          <p> OrderId : ${update.orderid} </p>
+          <p> Your food is ready and served, please take it from the counter. </p>
+          <br><br>
+          <h2>Regards , VIT Canteen </h2>
+          `
+
+
+          await sendemail(subject,message,send_to,sent_from)
+          return res.status(200).json("200")
+      }catch(err){
+        return res.status(200).json("400")
+      }
+    }
     return res.status(200).json("200");
   } catch (err) {
     return res.status(400).json("400");
@@ -215,7 +241,6 @@ router.post("/updateStatus", async (req, res) => {
 });
 
 router.post("/showNotification", async (req, res) => {
-  console.log("hi")
   const { ishowed, _id } = req.body;
   console.log(ishowed,_id);
   try {

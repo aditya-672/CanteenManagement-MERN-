@@ -12,10 +12,12 @@ import {
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
 import { useCart } from 'react-use-cart';
+import { useNavigate } from "react-router-dom";
 import Veg from '../../Images/icons8-vegetarian-food-symbol-48.png'
 import NonVeg from '../../Images/icons8-non-vegetarian-food-symbol-48.png'
 
 function ProductAddToCart(props) {
+  const navigate = useNavigate()
   const { addItem } = useCart();
   return (
     <Flex justifyContent="space-between">
@@ -99,7 +101,10 @@ function ProductAddToCart(props) {
                   fontSize="2xl"
                   // color={useColorModeValue("gray.800", "white")}
                 >
-                  <Button colorScheme="teal" w="100">
+                  <Button colorScheme="teal" w="100" onClick={()=>{
+                    navigate("/user/item-page");
+                    addItem(data)
+                  }}>
                     Buy Now
                   </Button>
                 </Box>
