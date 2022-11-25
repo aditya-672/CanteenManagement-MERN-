@@ -8,16 +8,16 @@ import {
     Button,
     useColorMode,
 } from '@chakra-ui/react';
-import { ButtonProps} from '@chakra-ui/react';
+import { ButtonProps } from '@chakra-ui/react';
 import { BsSun, BsMoonStarsFill } from 'react-icons/bs';
 import React from 'react'
-import { HamburgerIcon } from '@chakra-ui/icons';
+import { HamburgerIcon,ChevronRightIcon } from '@chakra-ui/icons';
 import { DrawerBody, DrawerHeader, DrawerContent, DrawerOverlay, Drawer, Icon, Divider } from '@chakra-ui/react'
 import { Link } from 'react-router-dom';
 
 
 export default function Simple(props: ButtonProps) {
-    const { colorMode,toggleColorMode } = useColorMode()
+    const { colorMode, toggleColorMode } = useColorMode()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [placement] = React.useState('left')
     return (
@@ -47,7 +47,7 @@ export default function Simple(props: ButtonProps) {
                 <DrawerContent>
                     <DrawerHeader borderBottomWidth='1px'>Logo</DrawerHeader>
                     <DrawerBody>
-                        <Link to="/canteen/" >
+                        <Link to="/canteen" >
                             <Flex align="center"
                                 p="4"
                                 mx="-2"
@@ -58,13 +58,11 @@ export default function Simple(props: ButtonProps) {
                                     bg: 'cyan.400',
                                     color: 'white',
                                 }}>
-                                <Icon
-                                    mr="4"
+                                <ChevronRightIcon mr="4"
                                     fontSize="16"
                                     _groupHover={{
                                         color: 'white',
-                                    }}
-                                />
+                                    }} />
                                 Home
                             </Flex>
                         </Link>
@@ -80,13 +78,11 @@ export default function Simple(props: ButtonProps) {
                                     bg: 'cyan.400',
                                     color: 'white',
                                 }}>
-                                <Icon
-                                    mr="4"
+                                <ChevronRightIcon mr="4"
                                     fontSize="16"
                                     _groupHover={{
                                         color: 'white',
-                                    }}
-                                />
+                                    }} />
                                 Add Category
                             </Flex>
                         </Link>
@@ -102,13 +98,11 @@ export default function Simple(props: ButtonProps) {
                                     bg: 'cyan.400',
                                     color: 'white',
                                 }}>
-                                <Icon
-                                    mr="4"
+                                <ChevronRightIcon mr="4"
                                     fontSize="16"
                                     _groupHover={{
                                         color: 'white',
-                                    }}
-                                />
+                                    }} />
                                 Add Items
                             </Flex>
                         </Link>
@@ -124,18 +118,16 @@ export default function Simple(props: ButtonProps) {
                                     bg: 'cyan.400',
                                     color: 'white',
                                 }}>
-                                <Icon
-                                    mr="4"
+                                <ChevronRightIcon mr="4"
                                     fontSize="16"
                                     _groupHover={{
                                         color: 'white',
-                                    }}
-                                />
+                                    }} />
                                 Total Order
                             </Flex>
                         </Link>
                         <Divider />
-                        <Link to="#" _focus={{ boxShadow: 'none' }}>
+                        <Link to="/" _focus={{ boxShadow: 'none' }}>
                             <Flex align="center"
                                 p="4"
                                 mx="-2"
@@ -146,14 +138,12 @@ export default function Simple(props: ButtonProps) {
                                     bg: 'cyan.400',
                                     color: 'white',
                                 }}>
-                                <Icon
-                                    mr="4"
+                                <ChevronRightIcon mr="4"
                                     fontSize="16"
                                     _groupHover={{
                                         color: 'white',
-                                    }}
-                                />
-                                Cancelled Order
+                                    }} />
+                                Logout
                             </Flex>
                         </Link>
                         <Divider />

@@ -24,7 +24,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import React from "react";
-import Navbar from "../navbar/Navbar";
+import UserNavbar from "../navbar/UserNavbar";
 import SupportedCard from "../../Images/SupportedCards.png";
 import { BsCreditCard2BackFill, BsCashStack } from "react-icons/bs";
 import { DeleteIcon } from "@chakra-ui/icons";
@@ -75,7 +75,7 @@ export default function ItemPage() {
   // if (isEmpty) return <h1 className=" text-center "> Your Cart is Empty </h1>;
   return (
     <>
-      <Navbar />
+      <UserNavbar />
       <Flex flexDirection="row" justifyContent="space-between" p="5">
         <div className="responsive-div">
           <Box

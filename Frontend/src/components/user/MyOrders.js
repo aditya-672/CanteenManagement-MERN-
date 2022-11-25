@@ -21,7 +21,7 @@ import {
   TableContainer,
   // ButtonGroup,
 } from "@chakra-ui/react";
-import Navbar from "../navbar/Navbar";
+import UserNavbar from "../navbar/UserNavbar";
 // import { DeleteIcon } from "@chakra-ui/icons";
 // import { MdModeEditOutline } from "react-icons/md";
 import { useState, useEffect } from "react";
@@ -58,7 +58,7 @@ export default function Category() {
 
   return (
     <>
-      <Navbar />
+      <UserNavbar />
       <Box
         p="2"
         borderStyle={"solid"}

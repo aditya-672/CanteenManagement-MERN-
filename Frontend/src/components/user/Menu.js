@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../navbar/Navbar";
+import UserNavbar from "../navbar/UserNavbar";
 import { FiShoppingCart } from "react-icons/fi";
 import Product from "../../pages/Product/Product";
 import {
@@ -15,7 +15,7 @@ import {
 import { db } from "../../firebase/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCart } from "react-use-cart";
 import { RoleContext } from "../../App";
 import { useContext } from "react";
@@ -76,8 +76,8 @@ export default function Menu() {
       );
     });
     console.log(f)
-    if(f){
-      for(var a in f){
+    if (f) {
+      for (var a in f) {
         console.log(f[a]);
         toast({
           title: `Wait your Order Id : ${f[a].orderid} is still cooking ! `,
@@ -89,7 +89,7 @@ export default function Menu() {
         });
       }
     }
-    
+
     // if (filter.length === 0) {
     //   toast({
     //     title: `Wait Yaar the Order is COOKING NA ! `,
@@ -109,7 +109,7 @@ export default function Menu() {
     b = b[0];
     let orderID;
     b = b.filter((item) => {
-      console.log("b",b)
+      console.log("b", b)
       return orderlist2[item];
     });
     if (filter.length !== 0) {
@@ -170,14 +170,14 @@ export default function Menu() {
 
   return (
     <>
-      <Navbar />
+      <UserNavbar />
       <Flex justifyContent="space-between">
         <Heading as="h2" p="10" size="2xl">
           Menu Item
         </Heading>
         {showbUtton && <Button onClick={handleNOT}>Get order</Button>}
-        <Button onClick={()=>navigate("/user/myorders")}>My Orders</Button>
-        <Button onClick={()=>navigate("/")}>LogOut</Button>
+        {/* <Button onClick={() => navigate("/user/myorders")}>My Orders</Button>
+        <Button onClick={() => navigate("/")}>LogOut</Button> */}
         <Box
           display="flex"
           justifyContent="center"
@@ -191,11 +191,7 @@ export default function Menu() {
           <Badge colorScheme="green">{totalUniqueItems}</Badge>
         </Box>
       </Flex>
-      <SimpleGrid minChildWidth="250px" spacing={2} p="10">
-        <Box>
-          <Product itm={itm} />
-        </Box>
-      </SimpleGrid>
+      <Product itm={itm} />
     </>
   );
 }

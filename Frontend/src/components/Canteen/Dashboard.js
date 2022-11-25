@@ -23,9 +23,9 @@ export default function Dashboard() {
                 </Flex>
             </Box>
             <Box p='8'>
-                <SimpleGrid minChildWidth='250px' spacing={2} p='10'>
+                {/* <SimpleGrid minChildWidth='250px' spacing={2} p='10'> */}
                     <Box><Order /></Box>
-                </SimpleGrid>
+                {/* </SimpleGrid> */}
             </Box>
         </>
     )
