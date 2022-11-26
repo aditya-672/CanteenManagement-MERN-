@@ -7,6 +7,7 @@ const Order = require("../model/orderschema");
 const authenticate = require("../middleware/authenticate");
 const sendemail = require("../middleware/sendemail");
 const router = express.Router();
+const io = require('../index') 
 
 //------------------------------------USER SIDE--------------------------------------------//
 router.post("/userregister", async (req, res) => {
@@ -115,6 +116,7 @@ router.post("/managerlogin", async (req, res) => {
           expires: new Date(Date.now() + 3600000),
           httpOnly: true,
         });
+        // console.log(io)
         return res.status(200).json("200");
       } else {
         return res.status(405).json("405");
@@ -198,6 +200,10 @@ router.get("/showorders", async (req, res) => {
 
 router.post("/updateStatus", async (req, res) => {
   console.log(req.body);
+  io.on("connection",(socket)=>{
+    console.log("hi")
+    socket.emit("Data","hi")
+  })
   // const email = "waghmareaditya08@gmail.com"
   const { orderStatus, _id, paymentStatus } = req.body;
   try {
@@ -212,7 +218,7 @@ router.post("/updateStatus", async (req, res) => {
         new:true,
       }
     );
-    console.log(update)
+    // console.log(update)
     const stu = await User.findById(update.stuid)
     if(update.orderStatus==="Done"){
       try{
@@ -226,8 +232,6 @@ router.post("/updateStatus", async (req, res) => {
           <br><br>
           <h2>Regards , VIT Canteen </h2>
           `
-
-
           await sendemail(subject,message,send_to,sent_from)
           return res.status(200).json("200")
       }catch(err){

@@ -11,24 +11,38 @@ import {
   Badge,
   Button,
   useToast,
+  Select,
+  FormLabel,
 } from "@chakra-ui/react";
 import { db } from "../../firebase/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { Link} from "react-router-dom";
+import { MdFilterAlt } from "react-icons/md";
 import { useCart } from "react-use-cart";
 import { RoleContext } from "../../App";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
 
 export default function Menu() {
+  const [onfilter, setOFFfilter] = useState(false);
+  const [newList, setNewList] = useState([]);
   const navigate = useNavigate()
   const toast = useToast();
+  const [cat, setCat] = useState([]);
   const { totalUniqueItems } = useCart();
   const role = useContext(RoleContext);
   const [itm, setItm] = useState([]);
   const [orderlist, setOrderlist] = useState([]);
   const [showbUtton, setShowbutton] = useState(false);
+  const socket = io.connect("http://localhost:5000/");
+
+  socket.on("Data",(data)=>{
+    console.log(data);
+  })
+
+
   const getData = async () => {
     try {
       const res = await fetch("/showorders", {
@@ -53,6 +67,17 @@ export default function Menu() {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleFilter = (e) => {
+    if (!e.target.value) {
+      return setOFFfilter(false);
+    }
+    const updated = itm.filter((element) => {
+      return element.category === e.target.value.trim();
+    });
+    setNewList(updated);
+    setOFFfilter(true);
   };
 
   const handleNOT = () => {
@@ -164,8 +189,26 @@ export default function Menu() {
     return unsub;
   }, []);
 
+  const getData2 = async () => {
+    try {
+      const res = await fetch("/getcategories", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          credentials: "include",
+        },
+      });
+      const data = await res.json();
+      setCat(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     getData();
+    getData2();
   }, []);
 
   return (
@@ -175,6 +218,20 @@ export default function Menu() {
         <Heading as="h2" p="10" size="2xl">
           Menu Item
         </Heading>
+        <Box p="8" display="flex" alignItems="center" gap="20px">
+        <FormLabel>
+          Filter <Icon as={MdFilterAlt} />
+        </FormLabel>
+        <Select placeholder="Select option" w="2xl" onChange={handleFilter}>
+          {cat.map((item) => {
+            return (
+              <option key={item.id} value={item.category}>
+                {item.category}
+              </option>
+            );
+          })}
+        </Select>
+      </Box>
         {showbUtton && <Button onClick={handleNOT}>Get order</Button>}
         <Button onClick={()=>navigate("/user/myorders")}>My Orders</Button>
         <Button onClick={()=>navigate("/")}>LogOut</Button>
@@ -192,9 +249,17 @@ export default function Menu() {
         </Box>
       </Flex>
       <SimpleGrid minChildWidth="250px" spacing={2} p="10">
-        <Box>
-          <Product itm={itm} />
-        </Box>
+        
+          {/* <Product itm={itm} /> */}
+          {onfilter ? (
+            // <Box>
+              <Product itm={newList} />
+            // </Box>
+            ) : (
+              // <Box>
+                <Product itm={itm} />
+              // </Box>
+            )}
       </SimpleGrid>
     </>
   );

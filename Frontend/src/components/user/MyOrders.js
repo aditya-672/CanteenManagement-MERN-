@@ -90,6 +90,7 @@ export default function Category() {
             <Tr>
               <Th fontSize="1.5rem">Sr. No.</Th>
               <Th fontSize="1.5rem">Food Items</Th>
+              <Th fontSize="1.5rem">Order ID</Th>
               <Th fontSize="1.5rem">Total Price</Th>
               <Th fontSize="1.5rem">Order On</Th>
               <Th fontSize="1.5rem">Payment Status</Th>
@@ -124,6 +125,7 @@ export default function Category() {
                       })}
                     </Accordion>
                   </Td>
+                  <Td>{item.orderid}</Td>
                   <Td>{item.totalprice}</Td>
                   <Td>{date.toLocaleDateString()}</Td>
                   <Td>{item.paymentStatus}</Td>
