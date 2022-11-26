@@ -5,21 +5,25 @@ import {
   Image,
   Badge,
   // useColorModeValue,
-//   Icon,
-//   chakra,
+  //   Icon,
+  //   chakra,
   Tooltip,
   IconButton,
 } from "@chakra-ui/react";
-import { DeleteIcon,EditIcon } from "@chakra-ui/icons";
-import {doc, deleteDoc} from 'firebase/firestore'
-import { db } from '../../firebase/firebase'
-import Veg from '../../Images/icons8-vegetarian-food-symbol-48.png'
-import NonVeg from '../../Images/icons8-non-vegetarian-food-symbol-48.png'
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import Veg from "../../Images/icons8-vegetarian-food-symbol-48.png";
+import NonVeg from "../../Images/icons8-non-vegetarian-food-symbol-48.png";
 
 function ProductAddToCart(props) {
   return (
-    <Flex justifyContent="space-between">
-        {props.itm.length===0 && <Box><h1>No Items</h1></Box>}
+    <Flex className="flex-div" gap="60px" alignItems="stretch" flexWrap="wrap">
+      {props.itm.length === 0 && (
+        <Box>
+          <h1>No Items</h1>
+        </Box>
+      )}
       {props.itm.map((data) => {
         return (
           <Box
@@ -46,6 +50,9 @@ function ProductAddToCart(props) {
               src={data.image}
               alt={`Picture of ${data.name}`}
               roundedTop="lg"
+              w="270px"
+              h="270px"
+              objectFit="cover"
             />
 
             <Box p="6">
@@ -88,10 +95,12 @@ function ProductAddToCart(props) {
                   fontSize="2xl"
                   // color={useColorModeValue("gray.800", "white")}
                 >
-                  <Box as="span" color={"gray.600"} fontSize="lg">
-                    
-                  </Box>
-                  {data.type==="Veg" ? <Image src={Veg}></Image> : <Image src={NonVeg}></Image>}
+                  <Box as="span" color={"gray.600"} fontSize="lg"></Box>
+                  {data.type === "Veg" ? (
+                    <Image src={Veg}></Image>
+                  ) : (
+                    <Image src={NonVeg}></Image>
+                  )}
                 </Box>
               </Flex>
               <Flex justifyContent="space-between" alignContent="center" mt="2">
@@ -99,43 +108,47 @@ function ProductAddToCart(props) {
                   fontSize="2xl"
                   // color={useColorModeValue("gray.800", "white")}
                 >
-                <Tooltip
-                  label="Delete Item"
-                  bg="white"
-                  placement={"top"}
-                  color={"gray.800"}
-                  fontSize={"1.2em"}
-                >
-                  <IconButton
-                    colorScheme="teal"
-                    aria-label="Call Segun"
-                    size="md"
-                    variant="outline"
-                    icon={<DeleteIcon />}
-                    onClick={async()=>{
-                        const res = window.confirm("Are u sure u wanna delete it")
-                        if (res){
-                            await deleteDoc(doc(db, "items",data.id))
+                  <Tooltip
+                    label="Delete Item"
+                    bg="white"
+                    placement={"top"}
+                    color={"gray.800"}
+                    fontSize={"1.2em"}
+                  >
+                    <IconButton
+                      colorScheme="teal"
+                      aria-label="Call Segun"
+                      size="md"
+                      variant="outline"
+                      icon={<DeleteIcon />}
+                      onClick={async () => {
+                        const res = window.confirm(
+                          "Are u sure u wanna delete it"
+                        );
+                        if (res) {
+                          await deleteDoc(doc(db, "items", data.id));
                         }
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip
-                  label="Edit Item"
-                  bg="white"
-                  placement={"top"}
-                  color={"gray.800"}
-                  fontSize={"1.2em"}
-                >
-                  <IconButton
-                    colorScheme="teal"
-                    aria-label="Call Segun"
-                    size="md"
-                    variant="outline"
-                    icon={<EditIcon />}
-                    onClick={()=>{props.update(data)}}
-                  />
-                </Tooltip>
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    label="Edit Item"
+                    bg="white"
+                    placement={"top"}
+                    color={"gray.800"}
+                    fontSize={"1.2em"}
+                  >
+                    <IconButton
+                      colorScheme="teal"
+                      aria-label="Call Segun"
+                      size="md"
+                      variant="outline"
+                      icon={<EditIcon />}
+                      onClick={() => {
+                        props.update(data);
+                      }}
+                    />
+                  </Tooltip>
                 </Box>
                 {/* <Tooltip
                   label="Add to cart"
